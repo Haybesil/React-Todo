@@ -1,22 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from 'react-router-dom';
-import { auth } from './components/firebase/Firebase'; // Import auth from Firebase.js
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { auth } from './components/firebase/Firebase';
 import Todo from './components/todo/Todo';
 import Signup from './components/signup/Signup';
 import Login from './components/login/Login';
 import Home from './components/home/Home';
-import { onAuthStateChanged, updateProfile, getAuth } from 'firebase/auth'; // Import necessary functions
+import { onAuthStateChanged, updateProfile, getAuth } from 'firebase/auth';
 
 function App() {
   const [user, setUser] = useState(null);
   const [welcomeMessage, setWelcomeMessage] = useState('');
 
   useEffect(() => {
+    console.log("Initializing authentication state listener...");
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
       console.log("Auth state changed:", authUser);
       if (authUser) {
@@ -25,14 +21,12 @@ function App() {
         const isFirstLogin = displayName === null || displayName === '';
         if (isFirstLogin) {
           setWelcomeMessage(`Welcome, ${authUser.email.split('@')[0]}!`);
-          // Set user's display name in Firebase profile
           const userAuth = getAuth();
           updateProfile(userAuth.currentUser, { displayName: authUser.email.split('@')[0] })
             .then(() => {
-              // Profile updated successfully
+              console.log("Profile updated successfully!");
             })
             .catch((error) => {
-              // An error occurred
               console.error('Error updating profile: ', error);
             });
         } else {
@@ -43,7 +37,10 @@ function App() {
       }
     });
 
-    return () => unsubscribe();
+    return () => {
+      console.log("Cleaning up authentication state listener...");
+      unsubscribe();
+    };
   }, []);
 
   return (
