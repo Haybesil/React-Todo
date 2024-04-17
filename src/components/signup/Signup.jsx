@@ -26,7 +26,27 @@ const Signup = () => {
       // Optionally, redirect the user to a different page after successful sign-up
     } catch (error) {
       // Handle sign-up errors and display error message to the user
-      setError(error.message);
+      if (error instanceof AuthError) {
+        switch (error.code) {
+          case 'auth/email-already-in-use':
+            setError('The email address is already in use by another account.');
+            break;
+          case 'auth/invalid-email':
+            setError('The email address is invalid.');
+            break;
+          case 'auth/weak-password':
+            setError('The password is too weak.');
+            break;
+          // Add more cases for other error codes if needed
+          default:
+            setError('An error occurred while signing up. Please try again later.');
+            break;
+        }
+      } else {
+        // Handle non-AuthError exceptions
+        setError('An unexpected error occurred. Please try again later.');
+        console.error('Error during sign-up:', error);
+      }
     }
   };
 
