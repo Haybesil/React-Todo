@@ -13,11 +13,9 @@ const Login = () => {
     e.preventDefault();
     try {
       // Sign in user with email and password using Firebase Auth
-      await signInWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-         console.log(userCredentials);
+      const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+      console.log(userCredentials);
  
-      })
      
       // Clear form fields after successful login
       setEmail('');
