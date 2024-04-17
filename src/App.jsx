@@ -18,6 +18,7 @@ function App() {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+      console.log("Auth state changed:", authUser);
       if (authUser) {
         setUser(authUser);
         const displayName = authUser.displayName;
@@ -58,6 +59,7 @@ function App() {
 }
 
 function ProtectedRoute({ user }) {
+  console.log("User:", user);
   return user ? <Todo /> : <Navigate to="/login" replace />;
 }
 
