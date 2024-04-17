@@ -20,23 +20,23 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (authUser) => {
       if (authUser) {
         setUser(authUser);
-        // const displayName = authUser.displayName;
-        // const isFirstLogin = displayName === null || displayName === '';
-        // if (isFirstLogin) {
-        //   setWelcomeMessage(`Welcome, ${authUser.email.split('@')[0]}!`);
-        //   // Set user's display name in Firebase profile
-        //   const userAuth = getAuth();
-        //   updateProfile(userAuth.currentUser, { displayName: authUser.email.split('@')[0] })
-        //     .then(() => {
-        //       // Profile updated successfully
-        //     })
-        //     .catch((error) => {
-        //       // An error occurred
-        //       console.error('Error updating profile: ', error);
-        //     });
-        // } else {
-        //   setWelcomeMessage(`Welcome back, ${displayName}!`);
-        // }
+        const displayName = authUser.displayName;
+        const isFirstLogin = displayName === null || displayName === '';
+        if (isFirstLogin) {
+          setWelcomeMessage(`Welcome, ${authUser.email.split('@')[0]}!`);
+          // Set user's display name in Firebase profile
+          const userAuth = getAuth();
+          updateProfile(userAuth.currentUser, { displayName: authUser.email.split('@')[0] })
+            .then(() => {
+              // Profile updated successfully
+            })
+            .catch((error) => {
+              // An error occurred
+              console.error('Error updating profile: ', error);
+            });
+        } else {
+          setWelcomeMessage(`Welcome back, ${displayName}!`);
+        }
       } else {
         setUser(null);
       }
