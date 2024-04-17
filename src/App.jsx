@@ -59,7 +59,7 @@ function App() {
 }
 
 function ProtectedRoute({ user }) {
-  console.log("User:", user);
+  console.log("User in ProtectedRoute:", user);
   return user ? <Todo /> : <Navigate to="/login" replace />;
 }
 
