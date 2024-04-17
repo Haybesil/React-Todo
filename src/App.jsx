@@ -43,6 +43,8 @@ function App() {
     };
   }, []);
 
+  console.log("User state in App:", user); // New console log
+
   return (
     <Router>
       <Routes>
