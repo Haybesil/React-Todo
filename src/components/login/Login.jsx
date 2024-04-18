@@ -3,26 +3,25 @@ import { Link, Navigate } from 'react-router-dom'
 import { auth } from '../firebase/Firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loggedIn, setLoggedIn] = useState(false); // Add state for login status
 
   const handleLogin = async (e) => {
-    console.log(auth);
     e.preventDefault();
     try {
       // Sign in user with email and password using Firebase Auth
       const userCredentials = await signInWithEmailAndPassword(auth, email, password);
       setLoggedIn(true);
-      console.log(userCredentials);
- 
-     
       // Clear form fields after successful login
       setEmail('');
       setPassword('');
       setError('');
+      if(onLogin) {
+        onLogin(userCredentials.user.displayName);
+      }
       // Optionally, redirect the user to a different page after successful login
     } catch (error) {
       // Handle login errors and display error message to the user

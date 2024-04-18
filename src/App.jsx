@@ -6,6 +6,7 @@ import Signup from './components/signup/Signup';
 import Login from './components/login/Login';
 import Home from './components/home/Home';
 import { onAuthStateChanged, updateProfile, getAuth } from 'firebase/auth';
+import Authdetails from './components/authdetails/Authdetails';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -18,12 +19,12 @@ function App() {
       if (authUser) {
         setUser(authUser);
         const displayName = authUser.displayName;
-        const isFirstLogin = displayName === null || displayName === '';
-        if (isFirstLogin) {
-          setWelcomeMessage(`Welcome, ${authUser.email.split('@')[0]}!`);
+        if (!displayName) {
+          const username = authUser.email ? authUser.email.split('@')[0] : 'User';
+          setWelcomeMessage(`Welcome, ${username}!`);
           const userAuth = getAuth();
           updateProfile(userAuth.currentUser, {
-            displayName: authUser.email.split('@')[0],
+            displayName: username,
           })
             .then(() => {
               console.log('Profile updated successfully!');
@@ -49,6 +50,8 @@ function App() {
 
   return (
     <Router>
+      <div>
+        <Authdetails/>
       <Routes>
         <Route path="/" element={<Home welcomeMessage={welcomeMessage} />} />
         <Route
@@ -64,6 +67,7 @@ function App() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
       </Routes>
+      </div>
     </Router>
   );
 }
