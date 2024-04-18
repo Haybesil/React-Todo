@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { auth } from '../firebase/Firebase';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 
@@ -7,6 +7,7 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loggedIn, setLoggedIn] = useState(false); // Add state for login status
 
   const handleLogin = async (e) => {
     console.log(auth);
@@ -14,6 +15,7 @@ const Login = () => {
     try {
       // Sign in user with email and password using Firebase Auth
       const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+      setLoggedIn(true);
       console.log(userCredentials);
  
      
@@ -27,6 +29,10 @@ const Login = () => {
       setError(error.message);
     }
   };
+
+  if (loggedIn) {
+    return <Navigate to="/todo" />; // Redirect to the main page after successful login
+  }
 
   return (
     <div className="max-w-md mx-auto mt-8 p-4 bg-gray-100 rounded-lg shadow-lg">

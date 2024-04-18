@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase/Firebase'; // Import auth from Firebase.js
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import 'firebase/auth';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 
@@ -9,6 +9,7 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [signedUp, setSignedUp] = useState(false);
 
   const handleSignUp = async (e) => {
     e.preventDefault();
@@ -17,6 +18,7 @@ const Signup = () => {
       await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         console.log(userCredentials);
+        setSignedUp(true);
       })
     
       // Clear form fields after successful sign-up
@@ -29,6 +31,10 @@ const Signup = () => {
       setError(error.message);
     }
   };
+
+  if(signedUp) {
+    return < Navigate to ='/todo'/>
+  }
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState); // Toggle the state of showPassword
