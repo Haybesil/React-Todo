@@ -6,10 +6,11 @@ const useAuth = () => {
   const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(user => {setCurrentUser(user)
-    })
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setCurrentUser(user);
+    });
 
-    return () => unsubscribe();
+    return () => unsubscribe(); // Unsubscribe from the listener when component unmounts
   }, []);
 
   return { currentUser };
