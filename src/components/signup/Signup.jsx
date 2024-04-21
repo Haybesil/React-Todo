@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { auth } from '../firebase/Firebase'; // Import auth from Firebase.js
 import { Link, Navigate } from 'react-router-dom';
-import 'firebase/auth';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -15,25 +14,24 @@ const Signup = () => {
     e.preventDefault();
     try {
       // Create user with email and password using Firebase Auth
-      await createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredentials) => {
-        console.log(userCredentials);
-        setSignedUp(true);
-      })
-    
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      setSignedUp(true);
+
+      // Send email verification
+      await sendEmailVerification(userCredential.user);
+
       // Clear form fields after successful sign-up
       setEmail('');
       setPassword('');
       setError('');
-      // Optionally, redirect the user to a different page after successful sign-up
     } catch (error) {
       // Handle sign-up errors and display error message to the user
       setError(error.message);
     }
   };
 
-  if(signedUp) {
-    return < Navigate to ='/todo'/>
+  if (signedUp) {
+    return <Navigate to="/todo" />;
   }
 
   const togglePasswordVisibility = () => {
@@ -71,7 +69,7 @@ const Signup = () => {
           {showPassword ? 'Hide password' : 'Show password'}
         </button>
         <p className="text-gray-700 mt-2">
-          Already have an account? <Link to='/login' className='text-blue-500'>Log In</Link>
+          Already have an account? <Link to="/login" className="text-blue-500">Log In</Link>
         </p>
       </form>
       {error && <p className="mt-4 text-red-500">{error}</p>}

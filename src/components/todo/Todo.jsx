@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import  useAuth  from '../useauth/Useauth'
+import { saveTodoList, loadTodoList } from '../todoservice/Todoservice'; // Import save and load functions
 
 const TodoList = () => {
+  const { currentUser } = useAuth();
   const [todos, setTodos] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [filter, setFilter] = useState('all'); // 'all', 'completed', 'active'
@@ -8,14 +11,33 @@ const TodoList = () => {
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState('');
 
+  useEffect(() => {
+
+    const loadTodos = async () => {
+      if(currentUser) {
+        const userId = currentUser.uid;
+        const loadedTodos = await loadTodoList(userId);
+        setTodos(loadedTodos);
+      }
+    };
+
+    loadTodos();
+  }, [currentUser]);
+
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
 
   const handleAddTodo = () => {
     if (inputValue.trim() !== '') {
-      setTodos([...todos, { text: inputValue, completed: false }]);
+      const newTodo = {text: inputValue, completed: false};
+      setTodos(prevTodos => [...prevTodos, newTodo]);
       setInputValue('');
+
+      if (currentUser) {
+        const userId = currentUser.uid;
+        saveTodoList(userId, [...todos, newTodo]);
+      }
     }
   };
 
