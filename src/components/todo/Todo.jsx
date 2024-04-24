@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Component } from 'react';
 import  useAuth  from '../useauth/Useauth'
 import { saveTodoList, loadTodoList } from '../todoservice/Todoservice'; // Import save and load functions
+import 'firebase/firestore';
 
 const TodoList = () => {
   const { currentUser } = useAuth();
@@ -10,7 +11,7 @@ const TodoList = () => {
   const [sort, setSort] = useState('default'); // 'default', 'alphabetical'
   const [editIndex, setEditIndex] = useState(null);
   const [editValue, setEditValue] = useState('');
-
+ 
   useEffect(() => {
 
     const loadTodos = async () => {
