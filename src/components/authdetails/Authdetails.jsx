@@ -37,7 +37,7 @@ const AuthDetails = () => {
     };
 
     return (
-        <div className="flex items-center">
+        <div className="max-w-md mx-auto mt-8 p-4 bg-gray-100 rounded-lg shadow-lg">
             {authUser ? (
                 <div className='flex justify-center max-w-md mx-auto mt-8 p-6 items-center py-[4rem]'>
                     <p className="text-[15px] sm:text-[23px] font-[400] mr-4">{`Signed in as ${authUser.email}`}</p>

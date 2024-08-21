@@ -7,6 +7,7 @@ import Login from './components/login/Login';
 import Home from './components/home/Home';
 import { onAuthStateChanged, updateProfile, getAuth } from 'firebase/auth';
 import Authdetails from './components/authdetails/Authdetails';
+import ForgetPassword from './components/ui/ForgetPassword';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -64,8 +65,10 @@ function App() {
             )
           }
         />
+        
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/forget" element={<ForgetPassword/>} />
       </Routes>
       </div>
     </Router>
